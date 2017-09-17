@@ -14,14 +14,21 @@
     "default_title": "GH Notifications"
   },
 
+  "background": {
+    "scripts": [
+      "webextension-polyfill/dist/browser-polyfill.js",
+      "background.js"
+    ]
+  },
+
   "content_scripts": [
     {
       "matches": ["*://github.com/notifications"],
-      "js": ["button.js"]
+      "js": [
+        "webextension-polyfill/dist/browser-polyfill.js",
+        "button.js"
+      ]
     }
-  ],
+  ]
 
-  "background": {
-    "scripts": ["background.js"]
-  }
 }
