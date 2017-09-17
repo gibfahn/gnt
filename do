@@ -31,6 +31,10 @@ case $1 in
      web-ext lint --ignore-files webextension-polyfill
      web-ext build --ignore-files webextension-polyfill
     ;;
+  run)
+    which web-ext &>/dev/null || . $NVM_DIR/nvm.sh
+    web-ext run
+    ;;
   sign) # Sign a Firefox extension.
      web-ext lint  --ignore-files $ignoreFilesOneLine
      web-ext build --ignore-files $ignoreFilesOneLine
@@ -42,4 +46,12 @@ case $1 in
     rm -f github-notifications-in-tabs.zip
     zip -r github-notifications-in-tabs.zip . -i $usedFilesOneLine
    ;;
-  esac
+  icon) # Recreate icons from svg file.
+    for i in 32 48 96 128; do
+      inkscape -z -e "$PWD"/icons/gnt${i}x${i}.png -w $i -h $i "$PWD"/icons/gnt.svg
+    done
+    ;;
+  *)
+    echo "Invalid command"
+    ;;
+esac
