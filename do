@@ -12,24 +12,26 @@ doc
 github-notifications-in-tabs.zip
 "
 
-# Put it all on one line for Firefox.
-ignoreFilesOneLine="$(echo "$ignoreFiles" | tr '\n' ' ')"
+# Put it all on one line for Firefox (xargs trims whitespace).
+ignoreFilesOneLine="$(echo "$ignoreFiles" | tr '\n' ' ' | xargs)"
 
 # List of everything except $ignoreFiles.
 usedFiles="$(ls | grep -vFx "$ignoreFiles")"
 # Put it all on one line for zip.
-usedFilesOneLine="$(echo "$usedFiles" | tr '\n' ' ')"
+usedFilesOneLine="$(echo "$usedFiles" | tr '\n' ' ' | xargs)"
 
+# TODO(gib): We should be able to use WEB_EXT_IGNORE_FILES but that doesn't seem
+# to work.
 case $1 in
   update) # Update the submodule.
     (cd webextension-polyfill; git fetch; git merge --ff-only;  npm install)
     ;;
   lint)
-     web-ext lint --ignore-files webextension-polyfill
+     web-ext lint --ignore-files $ignoreFilesOneLine
     ;;
   build)
-     web-ext lint --ignore-files webextension-polyfill
-     web-ext build --ignore-files webextension-polyfill
+     web-ext lint --ignore-files $ignoreFilesOneLine
+     web-ext build --ignore-files $ignoreFilesOneLine
     ;;
   run)
     which web-ext &>/dev/null || . $NVM_DIR/nvm.sh
@@ -52,6 +54,6 @@ case $1 in
     done
     ;;
   *)
-    echo "Invalid command"
+    echo "Invalid command, try: ./do [ update | lint | build | run | sign | chrome | icon ]"
     ;;
 esac
