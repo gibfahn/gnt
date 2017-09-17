@@ -19,7 +19,7 @@ console.log('newButton:', newButton)
 rightBar.insertBefore(newButton, existingButton)
 
 function passUrlsToBackground(event) {
-  let urls = Array.from(
+  const urls = Array.from(
     document.getElementsByClassName('js-navigation-open js-notification-target')
   ).map(a => a.href)
   console.log('urls:', urls)
