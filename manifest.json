@@ -10,13 +10,10 @@
   ],
 
   "icons": {
-    "32": "gnt.svg",
-    "48": "gnt.svg",
-    "96": "gnt.svg"
-  },
-
-  "browser_action": {
-    "default_title": "GH Notifications in Tabs"
+    "32": "./icons/gnt32x32.png",
+    "48": "./icons/gnt48x48.png",
+    "96": "./icons/gnt96x96.png",
+    "128": "./icons/gnt128x128.png"
   },
 
   "background": {
