@@ -1,0 +1,27 @@
+{
+  "manifest_version": 2,
+  "name": "gh-notifications-in-tabs",
+  "version": "1.0",
+
+  "description": "Opens a full page of GitHub notifications in tabs.",
+  "homepage_url": "https://github.com/gibfahn/gh-notifications-in-tabs",
+
+  "permissions": [
+    "activeTab"
+  ],
+
+  "browser_action": {
+    "default_title": "GH Notifications"
+  },
+
+  "content_scripts": [
+    {
+      "matches": ["*://github.com/notifications"],
+      "js": ["button.js"]
+    }
+  ],
+
+  "background": {
+    "scripts": ["background.js"]
+  }
+}
