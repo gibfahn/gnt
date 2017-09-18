@@ -34,7 +34,8 @@ git clone --recursive https://github.com/gibfahn/gnt && cd gnt
 ```
 
 You can load the extension directly from `about:debugging` (Firefox) and
-`chrome://extensions` (Chrome).
+`chrome://extensions` (Chrome). Load the `github-notifications-in-tabs`
+subdirectory.
 
 ### Developing
 

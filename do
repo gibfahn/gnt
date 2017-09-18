@@ -2,59 +2,42 @@
 
 # Firefox WebExtensions ID = {b6ec63ce-f41d-4348-ba6e-0013c059cf08}
 
-# Use newlines to separate so grep -vFx works to exclude them (Chrome).
-ignoreFiles="
-webextension-polyfill
-web-ext-artifacts
-chrome-artifacts
-do
-jwt
-doc
-github-notifications-in-tabs.zip
-"
+extensionDir=github-notifications-in-tabs
 
-# Put it all on one line for Firefox (xargs trims whitespace).
-ignoreFilesOneLine="$(echo "$ignoreFiles" | tr '\n' ' ' | xargs)"
+pushd $extensionDir
 
-# List of everything except $ignoreFiles.
-usedFiles="$(ls | grep -vFx "$ignoreFiles")"
-# Put it all on one line for zip.
-usedFilesOneLine="$(echo "$usedFiles" | tr '\n' ' ' | xargs)"
-
-# TODO(gib): We should be able to use WEB_EXT_IGNORE_FILES but that doesn't seem
-# to work.
 case $1 in
   update) # Update the submodule.
-    (cd webextension-polyfill; git fetch; git merge --ff-only;  npm install)
+    git fetch; git merge --ff-only; npm install
+    mv ./webextension-polyfill/dist/browser-polyfill.js $extensionDir
     ;;
   lint)
-     web-ext lint --ignore-files $ignoreFilesOneLine
+    web-ext lint
     ;;
   build)
-     web-ext lint --ignore-files $ignoreFilesOneLine
-     web-ext build --ignore-files $ignoreFilesOneLine
+    web-ext lint; web-ext build
     ;;
   run)
     which web-ext &>/dev/null || . $NVM_DIR/nvm.sh
-    web-ext run
+      web-ext run
     ;;
   sign) # Sign a Firefox extension.
-     web-ext lint  --ignore-files $ignoreFilesOneLine
-     web-ext sign  --ignore-files $ignoreFilesOneLine \
-       --api-key $(gpg  -d ~/.ssh/keys/AMO_JWT_ISSUER.gpg) \
-       --api-secret $(gpg  -d ~/.ssh/keys/AMO_JWT_SECRET.gpg) -v
+     web-ext lint
+     web-ext sign --api-key $(gpg  -d ~/.ssh/keys/AMO_JWT_ISSUER.gpg) \
+                  --api-secret $(gpg  -d ~/.ssh/keys/AMO_JWT_SECRET.gpg) -v
    ;;
   download) # Download a Firefox extension which failed to download in the sign step
     # $2 is the URl that failed above.
     TOKEN="$(AMO_JWT_ISSUER=$(gpg  -d ~/.ssh/keys/AMO_JWT_ISSUER.gpg) \
       AMO_JWT_SECRET=$(gpg  -d ~/.ssh/keys/AMO_JWT_SECRET.gpg) \
-      node ./jwt/gen.js)"
+      node ../jwt/gen.js)"
     curl -H "Authorization: JWT $TOKEN" "$2"
     ;;
   zip) # Package a chrome zip.
     echo "Zipping: $usedFilesOneLine"
-    rm -f github-notifications-in-tabs.zip
-    zip -r github-notifications-in-tabs.zip . -i $usedFilesOneLine
+    rm -f ../$extensionDir.zip
+    zip -r $extensionDir.zip .
+    mv $extensionDir.zip ..
    ;;
   icon) # Recreate icons from svg file.
     for i in 32 48 96 128; do
@@ -65,3 +48,5 @@ case $1 in
     echo "Invalid command, try: ./do [ update | lint | build | run | sign | zip | icon ]"
     ;;
 esac
+
+popd
