@@ -8,6 +8,7 @@ webextension-polyfill
 web-ext-artifacts
 chrome-artifacts
 do
+jwt
 doc
 github-notifications-in-tabs.zip
 "
@@ -39,12 +40,19 @@ case $1 in
     ;;
   sign) # Sign a Firefox extension.
      web-ext lint  --ignore-files $ignoreFilesOneLine
-     web-ext build --ignore-files $ignoreFilesOneLine
      web-ext sign  --ignore-files $ignoreFilesOneLine \
        --api-key $(gpg  -d ~/.ssh/keys/AMO_JWT_ISSUER.gpg) \
-       --api-secret $(gpg  -d ~/.ssh/keys/AMO_JWT_SECRET.gpg)
+       --api-secret $(gpg  -d ~/.ssh/keys/AMO_JWT_SECRET.gpg) -v
    ;;
-  chrome) # Package a chrome zip.
+  download) # Download a Firefox extension which failed to download in the sign step
+    # $2 is the URl that failed above.
+    TOKEN="$(AMO_JWT_ISSUER=$(gpg  -d ~/.ssh/keys/AMO_JWT_ISSUER.gpg) \
+      AMO_JWT_SECRET=$(gpg  -d ~/.ssh/keys/AMO_JWT_SECRET.gpg) \
+      node ./jwt/gen.js)"
+    curl -H "Authorization: JWT $TOKEN" "$2"
+    ;;
+  zip) # Package a chrome zip.
+    echo "Zipping: $usedFilesOneLine"
     rm -f github-notifications-in-tabs.zip
     zip -r github-notifications-in-tabs.zip . -i $usedFilesOneLine
    ;;
@@ -54,6 +62,6 @@ case $1 in
     done
     ;;
   *)
-    echo "Invalid command, try: ./do [ update | lint | build | run | sign | chrome | icon ]"
+    echo "Invalid command, try: ./do [ update | lint | build | run | sign | zip | icon ]"
     ;;
 esac
