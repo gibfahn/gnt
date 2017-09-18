@@ -21,23 +21,10 @@ case $1 in
     which web-ext &>/dev/null || . $NVM_DIR/nvm.sh
       web-ext run
     ;;
-  sign) # Sign a Firefox extension.
-     web-ext lint
-     web-ext sign --api-key $(gpg  -d ~/.ssh/keys/AMO_JWT_ISSUER.gpg) \
-                  --api-secret $(gpg  -d ~/.ssh/keys/AMO_JWT_SECRET.gpg) -v
-   ;;
-  download) # Download a Firefox extension which failed to download in the sign step
-    # $2 is the URl that failed above.
-    TOKEN="$(AMO_JWT_ISSUER=$(gpg  -d ~/.ssh/keys/AMO_JWT_ISSUER.gpg) \
-      AMO_JWT_SECRET=$(gpg  -d ~/.ssh/keys/AMO_JWT_SECRET.gpg) \
-      node ../jwt/gen.js)"
-    curl -H "Authorization: JWT $TOKEN" "$2"
-    ;;
-  zip) # Package a chrome zip.
+  zip) # Package the extension into a zip.
     echo "Zipping: $usedFilesOneLine"
     rm -f ../$extensionDir.zip
-    zip -r $extensionDir.zip .
-    mv $extensionDir.zip ..
+    zip -r ../$extensionDir.zip .
    ;;
   icon) # Recreate icons from svg file.
     for i in 32 48 96 128; do
