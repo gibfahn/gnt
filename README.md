@@ -11,6 +11,8 @@ tabs at once. Both Firefox (post-e10s) and Chrome handle this pretty well.
 
 For more information see https://github.com/gibfahn/gnt
 
+![Screenshot](doc/img/screenshot.png)
+
 ### Installing
 
 Addons are published here (note that they're not 100% working yet)
