@@ -1,15 +1,15 @@
 # Github Notifications in Tabs
 
 If you're like me you frequently end up with way too many Github Notifications.
-I like to go through them all a page at a time in new tabs to give the browser a
-good workout.
 
-This extension adds an extra button to the [GitHub notifications
-page](https://github.com/notifications) that opens the current page of
-unread notifications in tabs.
+This extension adds an extra button to the <a
+href="https://github.com/notifications">GitHub notifications page</a> that opens
+the current page of unread notifications in tabs.
 
-**NOTE:** This currently opens 5 items (and adds a red border to the page). This
-is for testing purposes.
+This also doubles as a good test of your browser's ability to handle ~30 new
+tabs at once. Both Firefox (post-e10s) and Chrome handle this pretty well.
+
+For more information see https://github.com/gibfahn/gnt
 
 ### Installing
 
