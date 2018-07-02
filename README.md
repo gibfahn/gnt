@@ -50,6 +50,15 @@ To run various useful commands use `./do` (see src for info):
 
 ### Uploading a new version
 
+- Make changes.
+- Test changes.
+- Update deps: `./do update; ./do icon`
+- Bump version in `github-notifications-in-tabs/manifest.json`.
+- Commit changes.
+- Build FF zip: `./do build`
+- Build Chrome zip: `./do zip`
+- Tag release.
+
 - [Firefox Dashboard][]
 - [Chrome Dashboard][]
 

@@ -1,39 +1,51 @@
-#!/bin/bash -e
+#!/bin/bash
 
 # Firefox WebExtensions ID = {b6ec63ce-f41d-4348-ba6e-0013c059cf08}
 
+set -eu
+
 extensionDir=github-notifications-in-tabs
 
-pushd $extensionDir
+# Install web-ext.
+which npm &>/dev/null || . $NVM_DIR/nvm.sh
+which web-ext &>/dev/null || { echo "Installing web-ext..."; npm install --global web-ext; }
 
-case $1 in
+case ${1:-} in
   update) # Update the submodule.
-    git fetch; git merge --ff-only; npm install
-    mv ./webextension-polyfill/dist/browser-polyfill.js $extensionDir
+    (cd webextension-polyfill; git fetch; git merge --ff-only; npm install)
+    mv ./webextension-polyfill/dist/browser-polyfill.js "$extensionDir"/
     ;;
   lint)
-    web-ext lint
+    (cd $extensionDir; web-ext lint)
     ;;
   build)
-    web-ext lint; web-ext build
+    (cd $extensionDir; web-ext lint; web-ext build)
     ;;
   run)
-    which web-ext &>/dev/null || . $NVM_DIR/nvm.sh
-      web-ext run
+    ( cd $extensionDir; web-ext run)
     ;;
   zip) # Package the extension into a zip.
-    echo "Zipping: $usedFilesOneLine"
-    rm -f ../$extensionDir.zip
-    zip -r ../$extensionDir.zip .
+    pushd $extensionDir
+    echo "Zipping:"
+    rm -f $extensionDir.zip
+    zip -r $extensionDir.zip .
+    popd
    ;;
   icon) # Recreate icons from svg file.
+    pushd $extensionDir
     for i in 32 48 96 128; do
       inkscape -z -e "$PWD"/icons/gnt${i}x${i}.png -w $i -h $i "$PWD"/icons/gnt.svg
     done
+    popd
     ;;
   *)
-    echo "Invalid command, try: ./do [ update | lint | build | run | sign | zip | icon ]"
+    echo "Invalid command, try: ./do [ update | lint | build | run | sign | zip | icon ]
+
+    Normal update flow:
+    - update: updates the submodule
+    - icon: rebuilds the icons
+    - build: builds the FF zip
+    - zip: builds the Chrome zip
+    "
     ;;
 esac
-
-popd
