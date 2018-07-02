@@ -22,15 +22,8 @@ case ${1:-} in
     (cd $extensionDir; web-ext lint; web-ext build)
     ;;
   run)
-    ( cd $extensionDir; web-ext run)
+    (cd $extensionDir; web-ext run)
     ;;
-  zip) # Package the extension into a zip.
-    pushd $extensionDir
-    echo "Zipping:"
-    rm -f $extensionDir.zip
-    zip -r $extensionDir.zip .
-    popd
-   ;;
   icon) # Recreate icons from svg file.
     pushd $extensionDir
     for i in 32 48 96 128; do
@@ -44,8 +37,7 @@ case ${1:-} in
     Normal update flow:
     - update: updates the submodule
     - icon: rebuilds the icons
-    - build: builds the FF zip
-    - zip: builds the Chrome zip
+    - build: builds the zip (upload to FF and Chrome)
     "
     ;;
 esac

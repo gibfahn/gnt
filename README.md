@@ -55,12 +55,9 @@ To run various useful commands use `./do` (see src for info):
 - Update deps: `./do update; ./do icon`
 - Bump version in `github-notifications-in-tabs/manifest.json`.
 - Commit changes.
-- Build FF zip: `./do build`
-- Build Chrome zip: `./do zip`
+- Build zip: `./do build`
+- Upload to [Firefox Dashboard][] and [Chrome Dashboard][]
 - Tag release.
-
-- [Firefox Dashboard][]
-- [Chrome Dashboard][]
 
 [Firefox Add-on page]: https://addons.mozilla.org/en-GB/firefox/addon/github-notifications-in-tabs/
 [Chrome Add-on page]: https://chrome.google.com/webstore/detail/github-notifications-in-t/mcccfglfeaibmhkbnkgdkkhoakjdafdf
