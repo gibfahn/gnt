@@ -12,8 +12,9 @@ which web-ext &>/dev/null || { echo "Installing web-ext..."; npm install --globa
 
 case ${1:-} in
   update) # Update the submodule.
-    (cd webextension-polyfill; git fetch; git merge --ff-only; npm install)
-    mv ./webextension-polyfill/dist/browser-polyfill.js "$extensionDir"/
+    git submodule update --remote
+    (cd webextension-polyfill; npm install)
+    mv ./webextension-polyfill/dist/browser-polyfill.min.js "$extensionDir"/
     ;;
   lint)
     (cd $extensionDir; web-ext lint)

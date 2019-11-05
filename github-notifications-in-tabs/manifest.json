@@ -19,7 +19,7 @@
 
   "background": {
     "scripts": [
-      "browser-polyfill.js",
+      "browser-polyfill.min.js",
       "background.js"
     ]
   },
@@ -33,7 +33,7 @@
         "*://*github*notifications*"
       ],
       "js": [
-        "browser-polyfill.js",
+        "browser-polyfill.min.js",
         "button.js"
       ]
     }
