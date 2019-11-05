@@ -18,7 +18,6 @@ function passUrlsToBackground(event) {
   const urls = Array.from(
     document.getElementsByClassName('js-navigation-open js-notification-target')
   ).map(a => a.href);
-  browser.runtime.sendMessage({urls: urls});
-  // TODO(gib): should we reload the tab? Maybe when all the tabs have been opened?
-  // window.location.reload(true)
+  const response = browser.runtime.sendMessage({urls: urls});
+  response.then(message => console.log(message), error => console.log(error));
 }
