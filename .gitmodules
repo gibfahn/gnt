@@ -1,4 +1,0 @@
-[submodule "webextension-polyfill"]
-	path = webextension-polyfill
-	url = https://github.com/mozilla/webextension-polyfill
-	branch = master
